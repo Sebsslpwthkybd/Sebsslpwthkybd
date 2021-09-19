@@ -1,6 +1,9 @@
-# coding:utf-8
+# -*- coding: utf-8 -*-
 import math
 import jieba
+import sys
+import chardet
+
 
 """
 这个程序用于完成简易的论文查重功能
@@ -9,17 +12,29 @@ import jieba
 """
 
 
-# Class and Global Variable
-# class Word:
-
-
 # Function
-def read_papers(paper1, paper2):
-    with open(paper1, "r", encoding='UTF-8') as paper1:  # 打开文件
-        origin_paper_string = jieba.lcut(paper1.read(), use_paddle=False, cut_all=False)  # 读取文件
+def get_encoding(file):
+    # 二进制方式读取，获取字节数据，检测类型
+    with open(file, 'rb') as data:
+        return chardet.detect(data.read())['encoding']
 
-    with open(paper2, "r", encoding='UTF-8') as paper2:  # 打开文件
-        exam_paper_string = jieba.lcut(paper2.read(), use_paddle=False, cut_all=False)  # 读取文件
+# 一种检测txt文本编码格式的方法，防止发生Unicode ERROR等错误。
+
+
+def read_papers(paper_path1, paper_path2):
+    # 打开并读取第一篇文章
+    code_format1 = get_encoding(paper_path1)
+    txt1 = open(paper_path1, 'r', encoding=code_format1)  # 打开文件
+    txt1_data = txt1.read()  # 读取文件
+    origin_paper_string = jieba.lcut(str(txt1_data), use_paddle=False, cut_all=False)  # 使用结巴分词将文章拆分成若干个词组
+    txt1.close()
+
+    # 打开并读取第二篇文章
+    code_format2 = get_encoding(paper_path2)
+    txt2 = open(paper_path2, 'r', encoding=code_format2)  # 打开文件
+    txt2_data = txt2.read()  # 读取文件
+    exam_paper_string = jieba.lcut(str(txt2_data), use_paddle=False, cut_all=False)  # 使用结巴分词将文章拆分成若干个词组
+    txt2.close()
 
     return origin_paper_string, exam_paper_string
 
@@ -38,6 +53,11 @@ def weight_calculation(word, paper, files_quantity=2):
     idf = {}  # tf、idf列表用于记录词频与逆向文件频率
     weight1 = {}  # 用于保存第一篇文章的TF-IDF值
     weight2 = {}  # 用于保存第二篇文章的TF-IDF值
+
+    # 删除被错误识别的多余的元素
+    word_list.remove('\n')
+    word_list.remove('，')
+    word_list.remove('。')
 
     # 初始化字典
     for i in word_list:
@@ -60,7 +80,7 @@ def weight_calculation(word, paper, files_quantity=2):
             if i in word[j]:
                 files_include_words[i] += 1
                 break
-        for j in range(0, len(word_list) - 1):
+        for j in range(0, len(paper) - 1):
             if i in paper[j]:
                 files_include_words[i] += 1
                 break
@@ -76,11 +96,11 @@ def weight_calculation(word, paper, files_quantity=2):
 
     # 计算权重
     for i in word_list:
-        weight1[i] = '%.8f' % (tf1[i] * idf[i])
-        weight2[i] = '%.8f' % (tf2[i] * idf[i])
+        weight1[i] = '%.10f' % (tf1[i] * idf[i])
+        weight2[i] = '%.10f' % (tf2[i] * idf[i])
 
     # 将词语以权重降序形式排列
-    w1 = sorted(weight1.items(), key=lambda x: x[1], reverse=True)
+    w1 = sorted(weight1.items(), key=lambda x: x[1], reverse=False)
 
     return w1, weight2
 
@@ -94,8 +114,9 @@ def vector_calculation(weight1, weight2):
     word_list = []
 
     # 由于使用sorted函数会将字典变为包含元组的列表，此循环可以将元组里的词和其权重拆分
-    for i in range(0, 40):
-        """请注意，此处range参数决定了查重精度，务必选择在安全的范围内（内存不溢出且精度不要过小），
+    for i in range(0, 60):
+        """
+        请注意，此处range参数决定了查重精度，务必选择在安全的范围内（内存不溢出且精度不要过小），
         此处不选择让用户定义主要是因为参数错误可能会导致发生重大错误！！！
         """
         n_str1 = []
@@ -105,6 +126,8 @@ def vector_calculation(weight1, weight2):
         n_str1.append(str1[1].rstrip(')').lstrip(' ').strip("'"))
         word_list.append(n_str1[0])
         vector1.append(float(n_str1[1]))
+
+
 
     for i in word_list:
         v = float(weight2[i].strip("'"))
@@ -129,8 +152,14 @@ def cosine_calculation(v1, v2):
         denominator1 += v1[i] * v1[i]
         denominator2 += v2[i] * v2[i]
 
+    # 计算分母的值
+    denominator = math.sqrt(denominator1) * math.sqrt(denominator2)
+
     # 计算余弦值
-    cos = '%.3f' % (numerator / (math.sqrt(denominator1) * math.sqrt(denominator2)))
+    if denominator == 0:
+        return 0
+    else:
+        cos = '%.3f' % (numerator / denominator)
 
     return cos
 
@@ -144,9 +173,10 @@ if __name__ == '__main__':
     v1 = []
     v2 = []
 
-    # 导入文章
-    paper1_path = input('请输入第一篇文章的完整路径：')
-    paper2_path = input('请输入第二篇文章的完整路径：')
+    # 读取命令行输入的文章路径
+    paper1_path = sys.argv[1]
+    paper2_path = sys.argv[2]
+    answer_path = sys.argv[3]
 
     case_paper, test_paper = read_papers(paper1_path, paper2_path)
 
@@ -157,4 +187,5 @@ if __name__ == '__main__':
     similarity = float(cosine_calculation(v1, v2))
     similarity *= 100
 
-    print('两篇文章的相似度为:' + str(similarity) + '%')
+    with open(answer_path, 'w') as f:
+        f.write('两篇文章的相似度为:' + str(similarity) + '%')
