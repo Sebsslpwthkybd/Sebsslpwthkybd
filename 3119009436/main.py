@@ -24,17 +24,15 @@ def get_encoding(file):
 def read_papers(paper_path1, paper_path2):
     # 打开并读取第一篇文章
     code_format1 = get_encoding(paper_path1)
-    txt1 = open(paper_path1, 'r', encoding=code_format1)  # 打开文件
-    txt1_data = txt1.read()  # 读取文件
-    origin_paper_string = jieba.lcut(str(txt1_data), use_paddle=False, cut_all=False)  # 使用结巴分词将文章拆分成若干个词组
-    txt1.close()
+    with open(paper_path1, 'r', encoding=code_format1) as txt1:  # 打开文件
+        txt1_data = txt1.read()  # 读取文件
+        origin_paper_string = jieba.lcut(str(txt1_data), use_paddle=False, cut_all=False)  # 使用结巴分词将文章拆分成若干个词组
 
     # 打开并读取第二篇文章
     code_format2 = get_encoding(paper_path2)
-    txt2 = open(paper_path2, 'r', encoding=code_format2)  # 打开文件
-    txt2_data = txt2.read()  # 读取文件
-    exam_paper_string = jieba.lcut(str(txt2_data), use_paddle=False, cut_all=False)  # 使用结巴分词将文章拆分成若干个词组
-    txt2.close()
+    with open(paper_path2, 'r', encoding=code_format2) as txt2:  # 打开文件
+        txt2_data = txt2.read()  # 读取文件
+        exam_paper_string = jieba.lcut(str(txt2_data), use_paddle=False, cut_all=False)  # 使用结巴分词将文章拆分成若干个词组
 
     return origin_paper_string, exam_paper_string
 
@@ -101,20 +99,19 @@ def weight_calculation(word, paper, files_quantity=2):
 
     # 将词语以权重降序形式排列
     w1 = sorted(weight1.items(), key=lambda x: x[1], reverse=False)
-
     return w1, weight2
 
 # 词频统计
 
 
-def vector_calculation(weight1, weight2):
+def vector_calculation(weight1, weight2, length = 60):
     # variable definition
     vector1 = []
     vector2 = []  # 用于存放文章的向量
     word_list = []
 
     # 由于使用sorted函数会将字典变为包含元组的列表，此循环可以将元组里的词和其权重拆分
-    for i in range(0, 60):
+    for i in range(0, length):
         """
         请注意，此处range参数决定了查重精度，务必选择在安全的范围内（内存不溢出且精度不要过小），
         此处不选择让用户定义主要是因为参数错误可能会导致发生重大错误！！！
