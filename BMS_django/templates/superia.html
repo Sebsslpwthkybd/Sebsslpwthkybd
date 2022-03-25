@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome, boss!</title>
+    <style>
+        body{
+            background-image: url("images/SkiTouring.jpg");
+            background-repeat: no-repeat;
+            background-size:100%;
+        }
+        #text{
+            font-weight: bold;
+            color:white;
+        }
+        #managing{
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius:10px;
+            background-color: rgba(240, 255, 255, 0.7);
+        }
+        #search-bank {
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius:10px;
+            background-color: rgba(240, 255, 255, 0.7);
+        }
+        table{
+            width: 80%;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        table caption{
+            font-size: 1em;
+            font-weight: bold;
+            margin: 1em 0;
+        }
+
+        th,td{
+            border: 1px solid #999;
+            text-align: center;
+            padding: 10px 0;
+        }
+        table tbody tr:nth-child(odd){
+            background-color: #eee;
+        }
+
+        table tbody tr:hover{
+            background-color: #ccc;
+        }
+        #home{
+            width: 80px;
+	        height: 30px;
+	        border-width: 0px;
+	        border-radius: 3px;
+	        background: #1E90FF;
+	        cursor: pointer;
+	        outline: none;
+	        font-family: Microsoft YaHei;
+	        color: white;
+	        font-size: 17px;
+            float: right;
+        }
+        #home:hover{
+            background: #5599FF;
+        }
+        #employees{
+            width: 80px;
+	        height: 30px;
+	        border-width: 0px;
+	        border-radius: 3px;
+	        background: #1E90FF;
+	        cursor: pointer;
+	        outline: none;
+	        font-family: Microsoft YaHei;
+	        color: white;
+	        font-size: 17px;
+            text-align: center;
+            transition:all 0.5s;
+        }
+        #employees:hover{
+            transform:scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <button id="home">主页</button>
+    <script>
+        let home=document.getElementById("home");
+        home.onclick = function(){
+            window.location.href='login.html';
+        }
+    </script>
+    <button id="employees">员工管理</button>
+    <script>
+        let employees=document.getElementById("employees");
+        employees.onclick = function(){
+            window.location.href='employee.html';
+        }
+    </script>
+    <p id="text">支行查询区</p>
+    <div id="search-bank">
+        <form method="get" action="">
+            <lable>支行名</lable><input type="text">
+            <input type="submit" value="查询">
+        </form>
+        <table>
+            <caption>以下是该支行的信息</caption>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>支行名</td>
+                        <td>{{支行名}}</td>
+                    </tr>
+                    <tr>
+                        <td>城市</td>
+                        <td>{{城市}}</td>
+                    </tr>
+                    <tr>
+                        <td>资产</td>
+                        <td>{{资产}}</td>
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+    <p id="text">支行管理区</p>
+    <div id="managing">
+        <form method="get" action="">
+            <p>
+                <lable>支行名</lable><input type="text">
+                <lable>城市</lable><input type="text">
+                <lable>资产</lable><input type="text">
+            </p>
+                <input type="submit" value="增加">
+                <input type="submit" value="删除">
+                <input type="submit" value="修改">
+        </form>
+    </div>
+</body>
+</html>

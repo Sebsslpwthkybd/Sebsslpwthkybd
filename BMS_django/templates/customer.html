@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome, our dear customer</title>
+    <style>
+        body{
+            background-image: url("images/LickObservatory.jpg");
+            background-repeat: no-repeat;
+            background-size:100%;
+        }
+        #box{
+            width: 800px;
+            height: 500px;
+            padding: 13px;
+            margin:auto;
+            margin-top:10px;
+            background-color: rgba(240, 255, 255, 0.5);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .btn{
+            width: 80px;
+	        height: 30px;
+	        border-width: 0px;
+	        border-radius: 3px;
+	        background: #1E90FF;
+	        cursor: pointer;
+	        outline: none;
+	        font-family: Microsoft YaHei;
+	        color: white;
+	        font-size: 17px;
+        }
+        .btn:hover{
+            background: #5599FF;
+        }
+        .text{
+            outline-style: none ;
+            border: 1px solid #ccc; 
+            border-radius: 3px;
+            padding:5px 0px;
+        }
+        p{
+        	color:rgb(66, 66, 66);
+        }
+        table{
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        table caption{
+            font-size: 1em;
+            font-weight: bold;
+            margin: 1em 0;
+        }
+
+        th,td{
+            border: 1px solid #999;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        table thead tr{
+            background-color: #00b7ff;
+            color: #fff;
+        }
+
+        table tbody tr:nth-child(odd){
+            background-color: #eee;
+        }
+
+        table tbody tr:hover{
+            background-color: #ccc;
+        }
+
+        table tbody tr td:first-child{
+            color: #f40;
+        }
+
+        table tfoot tr td{
+            text-align: right;
+            padding-right: 20px;
+        }
+        #home{
+            width: 80px;
+	        height: 30px;
+	        border-width: 0px;
+	        border-radius: 3px;
+	        background: #1E90FF;
+	        cursor: pointer;
+	        outline: none;
+	        font-family: Microsoft YaHei;
+	        color: white;
+	        font-size: 17px;
+        }
+        #home:hover{
+            background: #5599FF;
+        }
+    </style>
+</head>
+<body>
+    <button id="home">主页</button>
+    <script>
+        let home=document.getElementById("home");
+        home.onclick = function(){
+            window.location.href='login.html';
+        }
+    </script>
+    <div id="box">
+        <button class="btn">账户信息</button>
+        <form method="get" action="" class="customer_form">
+            <p>
+                贷款查询
+                <input type="text" id="loan_search" placeholder="请输入贷款号" class="text">
+                <input type="submit" value="查询" class="btn">
+            </p>
+            <p>
+                贷款
+                <input type="text" placeholder="请输入贷款金额" class="text">
+                <input type="submit" value="申请贷款" class="btn">
+            </p>
+        </form>
+        <table>
+            <caption>以下是你的贷款信息</caption>
+            <thead>
+                <tr>
+                    <th>贷款号</th>
+                    <th>支行名</th>
+                    <th>金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{{贷款号}}</th>
+                    <th>{{支行名}}</th>
+                    <th>{{金额}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        let person = document.getElementsByClassName('btn');
+        let personal=person[0];
+        personal.onclick = function() {
+            window.location.href='personal.html';
+        }
+    </script>
+</body>
+</html>

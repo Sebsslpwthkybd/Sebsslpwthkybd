@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome, boss!</title>
+    <style>
+        body{
+            background-image: url("images/SkiTouring.jpg");
+            background-repeat: no-repeat;
+            background-size:100%;
+        }
+        #handling{
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius:10px;
+            background-color: rgba(240, 255, 255, 0.5);
+        }
+        #search-box {
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius:10px;
+            background-color: rgba(240, 255, 255, 0.7);
+        }
+        table{
+            width: 80%;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        table caption{
+            font-size: 1em;
+            font-weight: bold;
+            margin: 1em 0;
+        }
+
+        th,td{
+            border: 1px solid #999;
+            text-align: center;
+            padding: 10px 0;
+        }
+        table tbody tr:nth-child(odd){
+            background-color: #eee;
+        }
+
+        table tbody tr:hover{
+            background-color: #ccc;
+        }
+        #home{
+            width: 80px;
+	        height: 30px;
+	        border-width: 0px;
+	        border-radius: 3px;
+	        background: #1E90FF;
+	        cursor: pointer;
+	        outline: none;
+	        font-family: Microsoft YaHei;
+	        color: white;
+	        font-size: 17px;
+            float: right;
+        }
+        #home:hover{
+            background: #5599FF;
+        }
+        #home{
+            width: 80px;
+	        height: 30px;
+	        border-width: 0px;
+	        border-radius: 3px;
+	        background: #1E90FF;
+	        cursor: pointer;
+	        outline: none;
+	        font-family: Microsoft YaHei;
+	        color: white;
+	        font-size: 17px;
+            float: right;
+            transition: all 0.5s;
+        }
+        #home:hover{
+            background: #5599FF;
+            transform:scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <button id="home">主页</button>
+    <script>
+        let home=document.getElementById("home");
+        home.onclick = function(){
+            window.location.href='login.html';
+        }
+    </script>
+    <p>员工管理区</p>
+    <div id="handling">
+        <form method="get" action="">
+            <p>
+                <lable>员工姓名</lable><input type="text">
+                <lable>身份证号</lable><input type="text">
+                <lable>电话</lable><input type="text">
+            </p>
+            <p>
+                <lable>住址</lable><input type="text">
+                <lable>开始工作时间</lable><input type="text">
+                <lable>经理身份证号</lable><input type="text">
+            </p>
+                <input type="submit" value="增加">
+                <input type="submit" value="删除">
+                <input type="submit" value="修改">
+        </form>
+    </div>
+    <p>员工查询区</p>
+    <div id="search-box">
+        <form method="get" action="">
+            <lable>员工身份证号</lable><input type="text">
+            <input type="submit" value="查询">
+        </form>
+        <table>
+            <caption>以下是该员工的信息</caption>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>姓名</td>
+                        <td>{{姓名}}</td>
+                    </tr>
+                    <tr>
+                        <td>电话</td>
+                        <td>{{电话}}</td>
+                    </tr>
+                    <tr>
+                        <td>住址</td>
+                        <td>{{住址}}</td>
+                    </tr>
+                    <tr>
+                        <td>开始工作时间</td>
+                        <td>{{开始工作时间}}</td>
+                    </tr>
+                    <tr>
+                        <td>经理身份证号</td>
+                        <td>{{经理身份证号}}</td>
+                    </tr>
+                </tbody>
+        </table>
+    </div>
+</body>
+</html>
